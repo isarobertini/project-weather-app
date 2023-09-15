@@ -1,9 +1,11 @@
 const currentCity = document.getElementById('current-city');
 const container = document.getElementById('weather');
 const cityInput = document.getElementById('city-input');
+const currentCityWeather = document.getElementById('current-city-weather');//todays weather and symbol is going to be un this div
 const searchButton = document.getElementById('search-button');
 const swipeButton = document.getElementById('swipe-button');
 const forecastTable = document.getElementById('forecast-table')
+const heroImage = document.getElementById('hero-image');
 
 const apiKey = '30497ceff63316bea65ec674ac0ba4c7';
 const cities = ['Stockholm', 'Rome', 'Bordeaux', 'Vienna'];
@@ -18,6 +20,7 @@ const formattedTime = (timestamp) => {
     ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     return (time)
 }
+
 
 
 //----------------------  Part1  ------------------------------------------
@@ -38,7 +41,7 @@ getWeatherData = (city) => {
             <h2> ${currentWeatherJson.name}</h2>
             `;
             currentCity.innerHTML += `
-            <h2>${formattedTime(currentWeatherJson.dt)}</h2>
+            <p>${formattedTime(currentWeatherJson.dt)}</p>
             `
             currentCity.innerHTML += `
             <p> ${currentWeatherJson.weather[0].description}</p>
@@ -47,8 +50,9 @@ getWeatherData = (city) => {
             <img src="https://openweathermap.org/img/wn/${currentWeatherJson.weather[0].icon}@2x.png">
             `;
             currentCity.innerHTML += `
-            <p> sunrise ${formattedTime(currentWeatherJson.sys.sunrise)} / sunset ${formattedTime(currentWeatherJson.sys.sunset)}
-            `
+            <p> sunrise ${formattedTime(currentWeatherJson.sys.sunrise)} 
+            / sunset ${formattedTime(currentWeatherJson.sys.sunset)}
+            `;
 
         })
         .catch((error) => {
@@ -112,10 +116,7 @@ weeklyForecast = (city) => {
         });
 }
 
-window.addEventListener('load', () => {
-    getWeatherData(cities[selectedCity]);
-    weeklyForecast(cities[selectedCity]);
-});
+
 
 
 //Event listeners 
@@ -142,6 +143,14 @@ swipeButton.addEventListener('click', () => {
         weeklyForecast(cities[selectedCity]);
     }
     else {//selectedCity >= cities.length
-        selectedCity = -1;
+        selectedCity = 0;
+        getWeatherData(cities[selectedCity]);
+        weeklyForecast(cities[selectedCity]);
     }
-})
+});
+window.addEventListener('load', () => {
+    getWeatherData(cities[selectedCity]);
+    weeklyForecast(cities[selectedCity]);
+
+});
+
